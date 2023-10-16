@@ -1,4 +1,4 @@
-from .views import StudentListView, StudentDetailView, PortfolioListView, PortfolioDetailView
+from .views import StudentListView, StudentDetailView, PortfolioListView, PortfolioDetailView, ProjectListView, ProjectDetailView
 from django.urls import path
 from . import views
 
@@ -10,4 +10,7 @@ urlpatterns = [
     path('student/<int:pk>', StudentDetailView.as_view(), name='student-detail'),
     path('portfolios/', PortfolioListView.as_view(), name= 'portfolios'),
     path('portfolio/<int:pk>', PortfolioDetailView.as_view(), name='portfolio-detail'),
+    path('projects/', ProjectListView.as_view(), name= 'projects'),
+    path('project/<int:pk>', ProjectDetailView.as_view(), name='project-detail'),
+    path('portfolio/<int:portfolio_id>/create_project/', views.createProject, name='create_project'),
 ]
