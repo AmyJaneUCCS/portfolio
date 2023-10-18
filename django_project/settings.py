@@ -21,11 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9=53(h%gtz4z4j)xl#yf0v11#$@7no4m-8a!@0$r53@+gvnc8^'
+# SECURITY WARNING: keep the secret key used in production secret
+if os.environ.get('DJANGO_PRODUCTION') == 'True': 
+    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') 
+else: 
+    SECRET_KEY = 'django-insecure-9=53(h%gtz4z4j)xl#yf0v11#$@7no4m-8a!@0$r53@+gvnc8^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_PRODUCTION') != 'True' 
 
 ALLOWED_HOSTS = []
 
@@ -132,3 +135,6 @@ MEDIA_URL = '/images/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SESSION_COOKIE_SECURE = os.environ.get('DJANGO_PRODUCTION') == 'True'
+CSRF_COOKIE_SECURE = os.environ.get('DJANGO_PRODUCTION') == 'True' 
+X_FRAME_OPTIONS = '*' 
