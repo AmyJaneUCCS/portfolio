@@ -66,6 +66,23 @@ def deleteProject(request, portfolio_id, project_id):
     context = {'form': form, 'project': project}
     return render(request, 'portfolio_app/project_delete_form.html', context)
 
+def updateProject(request, portfolio_id, project_id):
+    project = Project.objects.get(pk=project_id)
+    form = ProjectForm(instance=project)
+
+    if request.method == 'POST':
+        project_data = request.POST.copy()
+        form=ProjectForm(project_data, instance=project) # instance=project autofills the data
+
+        if form.is_valid():
+            project.title=form.cleaned_data['title']
+            project.is_active=form.cleaned_data['description']
+            project.save()
+            return redirect('portfolio-detail', pk=portfolio_id)
+
+    context = {'form': form, 'project': project}
+    return render(request, 'portfolio_app/project_form.html', context)
+
 
 def updatePortfolio(request, portfolio_id):
     portfolio = Portfolio.objects.get(pk=portfolio_id)
