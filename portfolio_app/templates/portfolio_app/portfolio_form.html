@@ -1,0 +1,21 @@
+<!-- inherit from base.html -->
+{% extends 'portfolio_app/base_template.html' %}
+
+<!-- Replace block content in base_template.html -->
+{% block content %}
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <a
+    class="btn btn-primary"
+    role="button"
+    href="{% url 'student-detail' portfolio.student.id %}"
+    >Cancel</a
+  >
+  <input type="submit" name="Update" />
+</form>
+
+{% endblock %}

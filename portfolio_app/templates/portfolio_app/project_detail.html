@@ -8,7 +8,12 @@
     <a href="{{ project.portfolio.get_absolute_url }}"
       >{{ project.portfolio.title }}
     </a>
-
-    {% endblock %}
   </strong>
 </p>
+<a
+  class="btn btn-primary"
+  href="{% url 'delete_project' project.portfolio.id project.id %}"
+  role="button"
+  >Delete</a
+>
+{% endblock %}

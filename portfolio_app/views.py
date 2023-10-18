@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views import generic
 
-from portfolio_app.forms import ProjectForm
+from portfolio_app.forms import ProjectForm, PortfolioForm
 from .models import Student, Portfolio, Project
 
 class StudentListView(generic.ListView):
@@ -54,3 +54,34 @@ def createProject(request, portfolio_id):
 
     context = {'form': form}
     return render(request, 'portfolio_app/project_form.html', context)
+
+def deleteProject(request, portfolio_id, project_id):
+    form = ProjectForm()
+    project = Project.objects.get(pk=project_id)
+    
+    if request.method == 'POST':
+        project.delete()
+        return redirect('portfolio-detail', pk=portfolio_id)
+
+    context = {'form': form, 'project': project}
+    return render(request, 'portfolio_app/project_delete_form.html', context)
+
+
+def updatePortfolio(request, portfolio_id):
+    portfolio = Portfolio.objects.get(pk=portfolio_id)
+    form = PortfolioForm(instance=portfolio)
+
+    if request.method == 'POST':
+        portfolio_data = request.POST.copy()
+        form=PortfolioForm(portfolio_data, instance=portfolio) # instance=portfolio autofills the data
+
+        if form.is_valid():
+            portfolio.title=form.cleaned_data['title']
+            portfolio.is_active=form.cleaned_data['is_active']
+            portfolio.contact_email=form.cleaned_data['contact_email']
+            portfolio.about=form.cleaned_data['about']
+            portfolio.save()
+            return redirect('portfolio-detail', pk=portfolio_id)
+
+    context = {'form': form, 'portfolio': portfolio}
+    return render(request, 'portfolio_app/portfolio_form.html', context)
